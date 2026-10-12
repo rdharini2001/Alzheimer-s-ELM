@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "oasis-elm-reproducibility"
+version = "1.1.0"
+description = "OASIS-2 ELM companion implementation and reproducible model comparisons"
+requires-python = ">=3.10"
+dependencies = ["numpy>=2.0,<3", "scikit-learn>=1.6,<1.9", "matplotlib>=3.8,<4"]
+[tool.setuptools.packages.find]
+where = ["src"]

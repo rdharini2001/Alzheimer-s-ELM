@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.egg-info/
+dist/
+build/
+.DS_Store
+*.log
+data/raw/*.xlsx
+data/processed/*.csv
+docs/reference_paper.pdf
+results/predictions/*.csv
+results/tables/test_fold_manifest.csv
+results/tables/elm_session_holdout_manifest.csv

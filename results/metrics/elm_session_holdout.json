@@ -1,0 +1,46 @@
+{
+  "experiment": "elm_session_holdout",
+  "source_data_target": "OASIS Group: Demented=1 / Nondemented=0; Converted excluded",
+  "split": "StratifiedShuffleSplit over MRI VISITS; 60 session test; seed=42",
+  "n_train_sessions": 276,
+  "n_test_sessions": 60,
+  "n_train_unique_subjects": 131,
+  "n_test_unique_subjects": 49,
+  "n_subjects_in_both_train_and_test": 44,
+  "feature_selection": "Greedy forward 5 steps by inner 3-fold CV ROC AUC on training sessions ONLY",
+  "feature_selection_base_elm": {
+    "n_hidden": 64,
+    "activation": "tanh",
+    "ridge_alpha": 0.01
+  },
+  "feature_set": [
+    "CDR",
+    "eTIV",
+    "EDUC",
+    "MMSE",
+    "nWBV"
+  ],
+  "final_elm": {
+    "n_hidden": 64,
+    "activation": "tanh",
+    "ridge_alpha": 0.0,
+    "output_solution": "Moore-Penrose pseudoinverse",
+    "seed": 42
+  },
+  "metrics": {
+    "n": 60,
+    "positive_n": 26,
+    "accuracy": 0.9833333333333333,
+    "sensitivity": 0.9615384615384616,
+    "specificity": 1.0,
+    "precision": 1.0,
+    "f1": 0.9803921568627451,
+    "auc": 1.0,
+    "brier": 0.08661750716841313,
+    "tn": 34,
+    "fp": 0,
+    "fn": 1,
+    "tp": 25
+  },
+  "validation_unit": "MRI session; subjects may appear in both partitions"
+}

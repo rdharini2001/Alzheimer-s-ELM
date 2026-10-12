@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "Please cite the study and OASIS-2 along with this companion software."
+title: "OASIS-2: ELM Alzheimer's Disease Companion Code"
+type: software
+version: "1.1.0"
+authors:
+  - name: "OASIS-ELM companion software contributors"
+abstract: >
+  Open, independently implemented companion code for extreme learning
+  machines and comparator classifiers using the OASIS-2 longitudinal cohort.
+references:
+  - type: article
+    title: "Assessment of Neuroimaging Data and Identification of Alzheimer's Disease Using Extreme Learning Machines"
+    authors:
+      - family-names: Raghavan
+        given-names: Dharini
+      - family-names: Suma
+        given-names: K. V.
+      - family-names: Ganesh
+        given-names: Puneeth N.
+    journal: "Journal of Machine Learning for Modeling and Computing"
+    volume: "4"
+    issue: "1"
+    year: 2023
+    start: 77
+    end: 93

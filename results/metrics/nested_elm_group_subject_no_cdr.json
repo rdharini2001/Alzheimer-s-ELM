@@ -1,0 +1,77 @@
+{
+  "experiment": "group_subject_no_cdr",
+  "outer_cv": "5-fold subject-independent stratified CV",
+  "inner_cv": "3-fold subject-independent stratified CV",
+  "selection": "greedy forward to 5 predictors by mean inner AUC; inside each outer training fold only",
+  "hyperparameters": [
+    {
+      "n_hidden": 32,
+      "alpha": 0.01,
+      "activation": "tanh"
+    },
+    {
+      "n_hidden": 32,
+      "alpha": 0.01,
+      "activation": "relu"
+    },
+    {
+      "n_hidden": 32,
+      "alpha": 1.0,
+      "activation": "tanh"
+    },
+    {
+      "n_hidden": 32,
+      "alpha": 1.0,
+      "activation": "relu"
+    },
+    {
+      "n_hidden": 64,
+      "alpha": 0.01,
+      "activation": "tanh"
+    },
+    {
+      "n_hidden": 64,
+      "alpha": 0.01,
+      "activation": "relu"
+    },
+    {
+      "n_hidden": 64,
+      "alpha": 1.0,
+      "activation": "tanh"
+    },
+    {
+      "n_hidden": 64,
+      "alpha": 1.0,
+      "activation": "relu"
+    }
+  ],
+  "seed": 42,
+  "metrics": {
+    "n": 336,
+    "positive_n": 146,
+    "accuracy": 0.8154761904761905,
+    "sensitivity": 0.6986301369863014,
+    "specificity": 0.9052631578947369,
+    "precision": 0.85,
+    "f1": 0.7669172932330827,
+    "auc": 0.8780821917808219,
+    "brier": 0.16354461355114489,
+    "tn": 172,
+    "fp": 18,
+    "fn": 44,
+    "tp": 102
+  },
+  "ci_from_fixed_oof_subject_bootstrap": {
+    "accuracy_ci_low": 0.7492532749098544,
+    "accuracy_ci_high": 0.8683465119543349,
+    "sensitivity_ci_low": 0.5947668256491786,
+    "sensitivity_ci_high": 0.777816091954023,
+    "specificity_ci_low": 0.8487688407782954,
+    "specificity_ci_high": 0.9530227558724832,
+    "f1_ci_low": 0.6898480836236933,
+    "f1_ci_high": 0.8299086949237728,
+    "auc_ci_low": 0.8180210758100032,
+    "auc_ci_high": 0.9138889341306023
+  },
+  "selected_features_can_vary_across_folds": true
+}

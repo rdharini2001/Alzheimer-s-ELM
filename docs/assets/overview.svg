@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="315" viewBox="0 0 1200 315">
+ <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101c36"/><stop offset="1" stop-color="#214976"/></linearGradient></defs>
+ <rect width="1200" height="315" rx="24" fill="url(#g)"/>
+ <circle cx="1075" cy="30" r="190" fill="#ffffff" opacity=".035"/><circle cx="1130" cy="260" r="145" fill="#ffffff" opacity=".045"/>
+ <text x="58" y="71" fill="#9ed6ff" font-size="16" font-family="Arial,sans-serif" font-weight="bold" letter-spacing="4">OASIS-2  ·  2023 PAPER REPRODUCTION</text>
+ <text x="58" y="124" fill="#fff" font-size="43" font-family="Arial,sans-serif" font-weight="bold">Extreme Learning Machines</text>
+ <text x="58" y="164" fill="#dbe8ff" font-size="23" font-family="Arial,sans-serif">A transparent, end-to-end Alzheimer’s disease study</text>
+ <g transform="translate(58,198)" font-family="Arial,sans-serif">
+ <rect width="249" height="81" rx="12" fill="#ffffff" opacity=".12"/><text x="18" y="34" font-size="28" font-weight="bold" fill="white">150</text><text x="18" y="60" font-size="15" fill="#b8d9ee">Participants</text>
+ <rect x="262" width="249" height="81" rx="12" fill="#ffffff" opacity=".12"/><text x="280" y="34" font-size="28" font-weight="bold" fill="white">373</text><text x="280" y="60" font-size="15" fill="#b8d9ee">MRI sessions</text>
+ <rect x="524" width="249" height="81" rx="12" fill="#ffffff" opacity=".12"/><text x="542" y="34" font-size="28" font-weight="bold" fill="white">98.33%</text><text x="542" y="60" font-size="15" fill="#b8d9ee">Exploratory accuracy match</text>
+ <rect x="786" width="259" height="81" rx="12" fill="#ffffff" opacity=".12"/><text x="804" y="34" font-size="28" font-weight="bold" fill="white">100%</text><text x="804" y="60" font-size="15" fill="#b8d9ee">Auditable code + predictions</text>
+ </g>
+</svg>

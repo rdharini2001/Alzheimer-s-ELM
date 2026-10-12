@@ -1,0 +1,45 @@
+{
+  "n_sessions": 373,
+  "n_subjects": 150,
+  "session_group_counts": {
+    "Converted": 37,
+    "Demented": 146,
+    "Nondemented": 190
+  },
+  "subject_group_counts": {
+    "Converted": 14,
+    "Demented": 64,
+    "Nondemented": 72
+  },
+  "session_per_subject": {
+    "2": 94,
+    "3": 43,
+    "4": 9,
+    "5": 4
+  },
+  "missing_by_column": {
+    "Subject ID": 0,
+    "MRI ID": 0,
+    "Group": 0,
+    "Visit": 0,
+    "MR Delay": 0,
+    "M/F": 0,
+    "Hand": 0,
+    "Age": 0,
+    "EDUC": 0,
+    "SES": 19,
+    "MMSE": 2,
+    "CDR": 0,
+    "eTIV": 0,
+    "nWBV": 0,
+    "ASF": 0
+  },
+  "group_label_change_within_subject": 0,
+  "nondemented_cdr_positive_sessions": 2,
+  "converted_cdr_zero_sessions": 18,
+  "seed": 42,
+  "python": "3.13.5",
+  "numpy": "2.3.5",
+  "scikit_learn": "1.8.0",
+  "split_protocol": "StratifiedKFold for one-visit subjects; StratifiedGroupKFold for grouped longitudinal sessions; StratifiedKFold for session-level analysis"
+}

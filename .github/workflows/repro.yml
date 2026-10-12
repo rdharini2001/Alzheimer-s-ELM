@@ -1,0 +1,22 @@
+name: Reproducibility checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run automated tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Verify output regenerates if data is provided
+        run: |
+          if [ -s data/processed/oasis_longitudinal.csv ]; then
+            PYTHONPATH=src python -m oasis_repro.runner --models Dummy ELM --bootstraps 0
+          fi
