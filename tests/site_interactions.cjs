@@ -25,14 +25,16 @@ const drawingContext = new Proxy({},{get(target,prop){return target[prop]??(()=>
 const elements = new Map();
 const get = (id) => { if(!elements.has(id))elements.set(id,new Element(id)); return elements.get(id); };
 const btns=['session_holdout','group_subject_no_cdr','group_subject_with_cdr','group_session_with_cdr'].map(p => {const e=get(`button:${p}`);e.dataset.protocol=p;return e;});
-const views=['lateral','coronal','axial'].map(v=>{const e=get('view:'+v);e.dataset.view=v;return e;});
+const views=['cortex','memory','outputs'].map(v=>{const e=get('view:'+v);e.dataset.view=v;return e;});
 const layers=['structure','features','network'].map(v=>{const e=get('layer:'+v);e.dataset.layer=v;return e;});
+const regions=['frontal','parietal','temporal','occipital','cerebellum','hippocampus','amygdala','ventricles'].map(v=>{const e=get('region:'+v);e.dataset.region=v;return e;});
+const outcomes=['tp','tn','fp','fn'].map(v=>{const e=get('outcome:'+v);e.dataset.outcome=v;return e;});
 const features=['eTIV','nWBV','CDR','MMSE','EDUC'].map(v=>{const e=get('feature:'+v);e.dataset.feature=v;return e;});
 get('project-data').textContent=embedded[1];
 get('metric-select').value='accuracy'; get('activation-select').value='tanh';
 const document={
   getElementById:get,
-  querySelectorAll:(query)=>({ '[data-protocol]':btns,'[data-view]':views,'[data-layer]':layers,'[data-feature]':features})[query]??[],
+  querySelectorAll:(query)=>({ '[data-protocol]':btns,'[data-view]':views,'[data-layer]':layers,'[data-feature]':features,'[data-region]':regions,'[data-outcome]':outcomes})[query]??[],
   createElement:(tag)=>new Element(`new:${tag}`),
   createElementNS:(n,tag)=>new Element(`svg:${tag}`),
   createTextNode:(txt)=>{const e=new Element('text');e.textContent=txt;return e;},
@@ -40,6 +42,10 @@ const document={
 };
 const sandbox={document,window:{addEventListener:()=>{},devicePixelRatio:1,matchMedia:()=>({matches:true})},navigator:{},URL:{},Blob,console,setTimeout,requestAnimationFrame:()=>1};
 vm.runInNewContext(fs.readFileSync(path.join(root,'docs/assets/site.js'),'utf8'),sandbox,{filename:'site.js'});
+assert.equal(get('outcome-count-tp').textContent,'25');
+assert.equal(get('outcome-count-tn').textContent,'34');
+assert.equal(get('outcome-count-fn').textContent,'1');
+assert.equal(get('outcome-count-fp').textContent,'0');
 assert.equal(get('comparison-title').textContent,'ELM · session holdout');
 assert.equal(get('detail-accuracy').textContent,'98.33%');
 assert.equal(get('confusion-matrix').children.length,4);
@@ -62,9 +68,17 @@ assert.equal(layers[1].attributes['aria-pressed'],'true');
 features[3].click();
 assert.equal(get('feature-description').children[0].textContent,'Mini-Mental State Examination');
 assert.equal(features[3].attributes['aria-pressed'],'true');
+regions[5].click();
+assert.equal(regions[5].attributes['aria-pressed'],'true');
+assert.equal(views[1].attributes['aria-pressed'],'true');
+outcomes[3].click();
+assert(get('outcome-headline').textContent.includes('1 ·'));
+get('show-outcome-on-brain').click();
+assert.equal(views[2].attributes['aria-pressed'],'true');
 get('reset-view').click();
 assert.equal(get('zoom-label').textContent,'100%');
 assert.equal(views[0].attributes['aria-pressed'],'true');
 assert.equal(layers[0].attributes['aria-pressed'],'true');
 assert.equal(get('brain-canvas').width,860);
+assert.equal(get('outcome-count-fn').textContent,'1');
 console.log('PASS: cohort, computed scores, chart controls, atlas orientations, zoom, layers and feature selection');

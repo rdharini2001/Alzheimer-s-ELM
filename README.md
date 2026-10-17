@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/overview.svg" alt="NeuroScope — OASIS-2 and Extreme Learning Machines" width="100%" />
+<img src="docs/assets/site-preview.webp" alt="NeuroScope — explore brain anatomy and OASIS-2 ELM model outcomes" width="100%" />
 
 # Assessment of Neuroimaging Data and Identification of Alzheimer's Disease Using Extreme Learning Machines
 
@@ -25,10 +25,12 @@ The dataset contains **150 participants** observed over **373 MRI sessions**. At
 
 ## Explore the results
 
-The accompanying **NeuroScope** project page is an interactive workspace for the OASIS-2 study. Its brain-inspired viewer offers rotatable orientations, zoom controls, study-variable selection, and a schematic view of ELM connectivity. The research sections include the longitudinal cohort, age distribution, classifier comparisons, confusion matrices, ROC curves, and an activation-function explorer. The brain illustration is conceptual, not an MRI reconstruction or a map of anatomical disease involvement; numerical charts are generated from the saved experiment outputs.
+The accompanying **NeuroScope** website combines an annotated lateral-view brain illustration with an interactive ELM results explorer. Readers can select the frontal, parietal, temporal and occipital lobes, cerebellum, hippocampus, amygdala and ventricles. The deep structures are indicated schematically because they are not visible on the outer cortical surface. Controls also explain the five tabular study variables (CDR, MMSE, eTIV, nWBV and education).
+
+The **ELM outcome lens** displays true-positive, true-negative, false-positive and false-negative counts computed directly from the saved session-holdout results. Choosing an outcome adds a whole-brain indicator in the anatomy viewer. This indicator communicates a *global classification*, not the model's attention to an anatomical region or an individual participant's MRI. Cohort plots, model comparisons, ROC curves, confusion matrices and the activation-function explorer remain available.
 
 <div align="center">
-<a href="docs/index.html"><img src="docs/assets/site-preview.webp" alt="NeuroScope, the interactive brain explorer and research atlas" width="84%" /></a>
+<a href="docs/index.html"><img src="docs/assets/site-preview.webp" alt="NeuroScope: labeled brain anatomy and aggregate ELM outcome exploration" width="84%" /></a>
 </div>
 
 ### ELM experiments

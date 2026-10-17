@@ -59,7 +59,6 @@ function activate(){const name=pick('activation-select').value, svg=pick('activa
  const pts=Array.from({length:171},(_,i)=>{const x=-4+8*i/170;return `${X(x).toFixed(1)},${Math.min(238,Math.max(20,Y(fn(x)))).toFixed(1)}`;}).join(' ');
  append(svg,svgEl('polyline',{points:pts,fill:'none',stroke:'#2d877e','stroke-width':4,'stroke-linejoin':'round','stroke-linecap':'round'}));
  append(svg,svgEl('text',{x:289,y:279,'font-size':11,fill:'#6a868a','text-anchor':'middle'},'Hidden-layer preactivation'));}
-// The interactive brain is a mathematical surface illustration. It does not represent MRI pixels, segmentation, or anatomical feature localization.
 const ATLAS_FEATURES={
  eTIV:{name:'Estimated intracranial volume',copy:'A global MRI-derived estimate of the cranial cavity volume, used as a model predictor.',kind:'MRI-DERIVED / GLOBAL VOLUME'},
  nWBV:{name:'Normalized whole brain volume',copy:'A global measure of brain volume relative to intracranial space. This illustration is not a volume map.',kind:'MRI-DERIVED / GLOBAL VOLUME'},
@@ -67,129 +66,123 @@ const ATLAS_FEATURES={
  MMSE:{name:'Mini-Mental State Examination',copy:'A recorded screening score describing cognitive performance; it is not an anatomical localization.',kind:'COGNITIVE ASSESSMENT'},
  EDUC:{name:'Years of education',copy:'Education history in the OASIS-2 tabular records, included among selected ELM predictors.',kind:'DEMOGRAPHIC MEASUREMENT'}
 };
+// This anatomical reference is an original teaching illustration. The OASIS-2 data
+// provide global volumetric and clinical predictors, not anatomical labels or voxel maps.
+const REGIONS={
+ frontal:{name:'Frontal lobe',x:.30,y:.37,deep:false,detail:'Involved in planning, executive function, attention, and voluntary motor control.',note:'Cortical structure · approximately indicated'},
+ parietal:{name:'Parietal lobe',x:.56,y:.22,deep:false,detail:'Supports sensory integration, spatial attention, and the organization of movement.',note:'Cortical structure · approximately indicated'},
+ temporal:{name:'Temporal lobe',x:.46,y:.60,deep:false,detail:'Involved in hearing, language and memory-related processing.',note:'Cortical structure · approximately indicated'},
+ occipital:{name:'Occipital lobe',x:.84,y:.35,deep:false,detail:'The major cortical region for processing visual information.',note:'Cortical structure · approximately indicated'},
+ cerebellum:{name:'Cerebellum',x:.77,y:.80,deep:false,detail:'Supports coordination, balance, motor learning and precision of movement.',note:'Visible in this lateral illustration'},
+ hippocampus:{name:'Hippocampus',x:.51,y:.57,deep:true,detail:'A medial temporal-lobe structure essential for forming new episodic memories. Its position is indicated schematically because it lies beneath the cortex.',note:'Deep structure · NOT visible on this brain surface'},
+ amygdala:{name:'Amygdala',x:.42,y:.58,deep:true,detail:'A deep medial temporal structure associated with emotional salience and aspects of memory. The marker is schematic.',note:'Deep structure · NOT visible on this brain surface'},
+ ventricles:{name:'Lateral ventricles',x:.57,y:.40,deep:true,detail:'Cerebrospinal-fluid-filled cavities deep within the cerebral hemispheres. Their marker is illustrative, not a segmented ventricle.',note:'Deep structure · NOT visible on this brain surface'}
+};
+let atlasController=null;
 function atlasInit(){
- const canvas=pick('brain-canvas');
- if(!canvas||typeof canvas.getContext!=='function')return;
- const ctx=canvas.getContext('2d');if(!ctx)return;
- const stage=pick('brain-stage');
- const reduced=typeof window.matchMedia==='function'&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- const state={yaw:.24,pitch:-.22,zoom:1,targetYaw:.24,targetPitch:-.22,layer:'structure',feature:'eTIV',drag:false,lastX:0,lastY:0,dirty:true,motion:0};
- const latN=43,lonN=78;
- const vertices=[];
- const idx=(a,b)=>a*(lonN+1)+b;
- for(let a=0;a<=latN;a++){
-  const theta=-Math.PI/2+a*Math.PI/latN;
-  for(let b=0;b<=lonN;b++){
-   const phi=b*Math.PI*2/lonN;
-   const corrugation=.048*Math.sin(13*phi+4*Math.sin(3*theta))*Math.cos(10*theta)+.027*Math.sin(21*phi-8*theta)+.015*Math.cos(29*theta+11*phi);
-   const taper=theta<-.3?Math.max(.73,1+.19*(theta+.3)) :1;
-   const r=1+corrugation;
-   const x=1.24*r*Math.cos(theta)*Math.cos(phi)*(theta<-.8?.88:1);
-   const y=.86*r*Math.sin(theta)-.013*Math.sin(phi*4)*Math.cos(theta);
-   const z=.97*r*Math.cos(theta)*Math.sin(phi)*taper;
-   vertices.push([x,y,z,theta,phi]);
-  }
- }
- const panels=[];
- for(let a=0;a<latN;a++)for(let b=0;b<lonN;b++)panels.push([idx(a,b),idx(a+1,b),idx(a+1,b+1),idx(a,b+1)]);
- const specs={lateral:{yaw:.24,pitch:-.22},coronal:{yaw:1.43,pitch:-.12},axial:{yaw:.30,pitch:1.27}};
- let points=[], logicalW=0,logicalH=0,rafId=null;
- const project=(x,y,z)=>{
-  const cy=Math.cos(state.yaw),sy=Math.sin(state.yaw),cp=Math.cos(state.pitch),sp=Math.sin(state.pitch);
-  const rx=cy*x+sy*z,rz=-sy*x+cy*z;
-  const ry=cp*y-sp*rz,rzz=sp*y+cp*rz;
-  const perspective=3.8/(3.8-rzz*.28);
-  const scale=Math.min(logicalW*.34,logicalH*.365)*state.zoom;
-  return {x:logicalW*.49+rx*scale*perspective,y:logicalH*.52-ry*scale*perspective,z:rzz,shade:.28+.72*Math.max(0,.23*rx+.45*ry+.74*rzz)};
+ const canvas=pick('brain-canvas');if(!canvas||typeof canvas.getContext!=='function')return null;
+ const ctx=canvas.getContext('2d');if(!ctx)return null;
+ const image=pick('brain-anatomy-image');
+ const state={view:'cortex',layer:'structure',region:'frontal',feature:'eTIV',outcome:'tp',zoom:1,panX:0,panY:0,drag:false,downX:0,downY:0,lastX:0,lastY:0};
+ let w=0,h=0;
+ const outcomes={tp:{shade:'#f9aa8b',label:'TRUE POSITIVE'},tn:{shade:'#c7f3ab',label:'TRUE NEGATIVE'},fn:{shade:'#f3c56c',label:'FALSE NEGATIVE'},fp:{shade:'#f19fa9',label:'FALSE POSITIVE'}};
+ const colors={structure:'#b8f7c9',features:'#e7f99b',network:'#f6a98e'};
+ const xy=(r)=>{
+   // The source illustration has a 3:2 aspect ratio and is fitted within the stage.
+   const iw=Math.min(w,h*1.5),ih=iw/1.5;
+   return {x:w*.5+(((w-iw)*.5+iw*r.x)-w*.5)*state.zoom+state.panX,
+           y:h*.5+(((h-ih)*.5+ih*r.y)-h*.5)*state.zoom+state.panY};
  };
- const draw=()=>{
-  state.yaw+=(state.targetYaw-state.yaw)*.12;
-  state.pitch+=(state.targetPitch-state.pitch)*.12;
-  if(!state.drag&&!reduced)state.motion+=.005;
-  const w=logicalW,h=logicalH;
-  if(!w||!h)return;
-  ctx.clearRect(0,0,w,h);
-  // Reference geometry and translucent orbit guides are illustrative design elements.
-  ctx.save();ctx.translate(w*.49,h*.52);ctx.strokeStyle='rgba(107,198,188,.11)';ctx.lineWidth=1;
-  for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(0,0,w*(.29+i*.035),h*(.31+i*.06),i*.20,0,Math.PI*2);ctx.stroke();}
-  ctx.strokeStyle='rgba(153,219,208,.12)';ctx.beginPath();ctx.moveTo(-w*.4,0);ctx.lineTo(w*.4,0);ctx.moveTo(0,-h*.40);ctx.lineTo(0,h*.40);ctx.stroke();ctx.restore();
-  points=vertices.map(([x,y,z])=>project(x,y,z));
-  const faces=panels.map(([a,b,c,d])=>{
-   const p=points[a],q=points[b],r=points[c],s=points[d];
-   return {v:[p,q,r,s],depth:(p.z+q.z+r.z+s.z)/4,lit:(p.shade+q.shade+r.shade+s.shade)/4};
-  }).sort((a,b)=>a.depth-b.depth);
-  faces.forEach(f=>{
-   const v=f.v,lit=f.lit,depth=f.depth;
-   const hue=state.layer==='network'?173:165;
-   const light=state.layer==='network'?Math.round(19+lit*29):Math.round(16+lit*42);
-   const sat=state.layer==='network'?37:38;
-   ctx.fillStyle=`hsl(${hue} ${sat}% ${light}%)`;
-   ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);for(let j=1;j<4;j++)ctx.lineTo(v[j].x,v[j].y);ctx.closePath();ctx.fill();
-   if(depth>-.1 && (state.layer==='structure'||state.layer==='features')){
-    ctx.lineWidth=lit>.65?.8:.5;ctx.strokeStyle=`rgba(188,246,213,${Math.max(.065,.09+lit*.13)})`;ctx.stroke();
+ function marker(id,focus){
+   const r=REGIONS[id],p=xy(r),deep=r.deep;
+   ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,focus?10:7,0,Math.PI*2);
+   ctx.strokeStyle=focus?'#e7fa9a':'rgba(219,244,233,.76)';ctx.lineWidth=focus?2.4:1.5;
+   if(deep)ctx.setLineDash([3,4]);ctx.stroke();ctx.setLineDash([]);
+   ctx.beginPath();ctx.arc(p.x,p.y,focus?3.9:2.5,0,Math.PI*2);ctx.fillStyle=deep?'#ffd0af':'#c7f5d0';ctx.fill();
+   if(focus){
+     const right=p.x<w*.52;const bx=Math.max(18,Math.min(w-170,p.x+(right?16:-161))),by=Math.max(24,Math.min(h-56,p.y-48));
+     ctx.strokeStyle='#d9efa8';ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(right?bx:bx+148,by+24);ctx.stroke();
+     ctx.fillStyle='rgba(5,25,40,.91)';ctx.fillRect(bx,by,150,35);ctx.strokeStyle='#5b958e';ctx.strokeRect(bx+.5,by+.5,149,34);
+     ctx.font='bold 11px Arial, sans-serif';ctx.fillStyle='#eaf9d3';ctx.fillText(r.name,bx+10,by+15);
+     ctx.font='9px monospace';ctx.fillStyle='#aac3b8';ctx.fillText(deep?'DEEP / SCHEMATIC':'ANATOMICAL GUIDE',bx+10,by+28);
    }
-  });
-  const visibleLine=(latFn,lonFn,n,stroke,width)=>{
-   ctx.lineWidth=width;ctx.strokeStyle=stroke;ctx.beginPath();let active=false;
-   for(let i=0;i<=n;i++){
-    const t=i/n;const theta=latFn(t),phi=lonFn(t);const co=Math.cos(theta);
-    const wobble=1+.055*Math.sin(13*phi+4*Math.sin(3*theta))*Math.cos(10*theta)+.027*Math.sin(21*phi-8*theta)+.015*Math.cos(29*theta+11*phi);
-    const p=project(1.24*wobble*co*Math.cos(phi)*(theta<-.8?.88:1),.86*wobble*Math.sin(theta)-.013*Math.sin(phi*4)*co,.97*wobble*co*Math.sin(phi)*(theta<-.3?Math.max(.73,1+.19*(theta+.3)):1));
-    if(p.z<-.08){if(active){ctx.stroke();ctx.beginPath();active=false;}continue;}
-    if(!active){ctx.moveTo(p.x,p.y);active=true;}else ctx.lineTo(p.x,p.y);
-   }ctx.stroke();
-  };
-  // Several surface trajectories give the brain a readable folded appearance.
-  for(let n=0;n<17;n++){
-   const phi=(n+.7)*Math.PI*2/17;
-   visibleLine(t=>-1.34+t*2.67+Math.sin(t*20+phi*3)*.036,t=>phi+.038*Math.sin(t*24+phi*5),80,n%4===0?'rgba(231,255,185,.37)':'rgba(194,247,223,.30)',n%4===0?1.65:1.1);
-  }
-  for(let n=0;n<11;n++){
-   const theta=(n+.8)*Math.PI/12-Math.PI/2;
-   visibleLine(t=>theta+.047*Math.sin(t*27+n*3),t=>t*Math.PI*2,130,n%3===0?'rgba(213,245,168,.33)':'rgba(128,215,198,.24)',1.1);
-  }
-  if(state.layer==='network'){
-   const nodes=[];
-   for(let i=0;i<44;i++){const theta=-1.06+2.05*(i%9)/8,phi=(i*2.39996)%(Math.PI*2);const rr=1.06;const p=project(1.24*rr*Math.cos(theta)*Math.cos(phi),.86*rr*Math.sin(theta),.97*rr*Math.cos(theta)*Math.sin(phi));if(p.z>0)nodes.push(p);}
-   nodes.forEach((p,i)=>{const q=nodes[(i*7+11)%nodes.length];ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.quadraticCurveTo((p.x+q.x)/2+15,(p.y+q.y)/2-16,q.x,q.y);ctx.strokeStyle='rgba(228,250,137,.18)';ctx.lineWidth=.8;ctx.stroke();ctx.beginPath();ctx.arc(p.x,p.y,i%5===0?3.5:2,0,Math.PI*2);ctx.fillStyle=i%5===0?'#e8fd9b':'#93e7d8';ctx.fill();});
-  }
-  if(state.layer==='features'){
-   const anchors=[[.17,.18],[.80,.20],[.10,.48],[.80,.70],[.24,.84]];
-   const featureNames=['eTIV','nWBV','CDR','MMSE','EDUC'];
-   anchors.forEach(([x,y],i)=>{
-    const px=x*w,py=y*h,bpx=w*.49+(x-.5)*w*.29,bpy=h*.52+(y-.5)*h*.25;
-    const on=state.feature===featureNames[i];
-    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(bpx,bpy);ctx.strokeStyle=on?'rgba(227,251,142,.88)':'rgba(138,216,202,.40)';ctx.lineWidth=on?2:1;ctx.stroke();
-    ctx.beginPath();ctx.arc(bpx,bpy,on?4:2.5,0,Math.PI*2);ctx.fillStyle=on?'#e1fb8e':'#7ccfc2';ctx.fill();
-    ctx.fillStyle=on?'#e1fb8e':'#c7e5df';ctx.font=`${on?'bold ':''}11px monospace`;ctx.fillText(featureNames[i],px,py-6);
-   });
-  }
-  ctx.fillStyle='rgba(186,219,219,.6)';ctx.font='10px monospace';ctx.fillText('ILLUSTRATIVE MODEL / NOT MRI DATA',Math.max(15,w*.05),h-16);
- };
- const measure=()=>{
-  const box=canvas.getBoundingClientRect();const w=Math.round(box.width),h=Math.round(box.height);
-  if(w<1||h<1)return;
-  logicalW=w;logicalH=h;const dpr=Math.min(2,window.devicePixelRatio||1);
-  canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();
- };
- const animate=()=>{if(state.drag||Math.abs(state.yaw-state.targetYaw)>.0002||Math.abs(state.pitch-state.targetPitch)>.0002){draw();}rafId=requestAnimationFrame(animate);};
- const changeView=(view)=>{const next=specs[view];if(!next)return;state.targetYaw=next.yaw;state.targetPitch=next.pitch;document.querySelectorAll('[data-view]').forEach(b=>{const active=b.dataset.view===view;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});draw();};
- const setLayer=(layer)=>{state.layer=layer;document.querySelectorAll('[data-layer]').forEach(b=>{const active=b.dataset.layer===layer;b.classList.toggle('on',active);b.setAttribute('aria-pressed',String(active));});draw();};
- const setFeature=(feature)=>{state.feature=feature;const info=ATLAS_FEATURES[feature];if(!info)return;const d=pick('feature-description');d.replaceChildren();const h=document.createElement('strong');h.textContent=info.name;const p=document.createElement('p');p.textContent=info.copy;const k=document.createElement('span');k.textContent=info.kind;d.append(h,p,k);document.querySelectorAll('[data-feature]').forEach(b=>{const on=b.dataset.feature===feature;b.classList.toggle('chosen',on);b.setAttribute('aria-pressed',String(on));});if(state.layer==='features')draw();};
+   ctx.restore();
+ }
+ function draw(){if(!w||!h)return;
+   ctx.clearRect(0,0,w,h);
+   const show=state.view==='memory'?['hippocampus','amygdala','ventricles']:['frontal','parietal','temporal','occipital','cerebellum'];
+   if(state.layer==='structure'&&state.view!=='outputs'){
+     show.forEach(id=>marker(id,id===state.region));
+   } else if(state.layer==='features'&&state.view!=='outputs'){
+     const mapping={eTIV:{text:'eTIV · global intracranial volume',top:.16},nWBV:{text:'nWBV · normalized whole brain volume',top:.30},CDR:{text:'CDR · clinical rating',top:.45},MMSE:{text:'MMSE · cognitive assessment',top:.60},EDUC:{text:'EDUC · years of education',top:.75}};
+     const a=mapping[state.feature];let cx=w*.5,cy=h*.52;
+     const hw=Math.min(w*.34,h*.43)*state.zoom;
+     ctx.save();ctx.strokeStyle='rgba(216,250,151,.7)';ctx.lineWidth=2;ctx.setLineDash([5,9]);ctx.beginPath();ctx.ellipse(cx+state.panX,cy+state.panY,hw*1.1,hw*.73,-.15,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+     const right=w*.70;const yy=h*a.top;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(right,yy);ctx.stroke();ctx.fillStyle='rgba(8,29,40,.94)';ctx.fillRect(Math.max(10,right-30),yy-30,Math.min(240,w*.35),45);ctx.fillStyle='#eafca7';ctx.font='bold 11px Arial, sans-serif';ctx.fillText(a.text,Math.max(15,right-20),yy-8);ctx.font='9px monospace';ctx.fillStyle='#a1c0b9';ctx.fillText('GLOBAL / NOT REGIONAL',Math.max(15,right-20),yy+8);ctx.restore();
+   }
+   if(state.view==='outputs'||state.layer==='network'){
+     const o=outcomes[state.outcome],cx=w*.5+state.panX,cy=h*.49+state.panY;
+     const r=Math.min(w*.4,h*.43)*state.zoom;
+     ctx.save();ctx.lineWidth=1.8;ctx.strokeStyle=o.shade;
+     for(let i=0;i<3;i++){
+       ctx.globalAlpha=.43-i*.10;ctx.beginPath();ctx.ellipse(cx,cy,r*(1.08+i*.10),r*(.78+i*.075),-.14,0,Math.PI*2);ctx.stroke();
+     }
+     ctx.globalAlpha=1;const bx=Math.max(12,w*.09),by=h*.15;
+     ctx.fillStyle='rgba(4,25,39,.9)';ctx.fillRect(bx,by,203,50);ctx.strokeStyle=o.shade;ctx.strokeRect(bx+.5,by+.5,202,49);
+     ctx.fillStyle=o.shade;ctx.font='bold 12px Arial, sans-serif';ctx.fillText(o.label,bx+12,by+19);
+     ctx.fillStyle='#b5d4ce';ctx.font='10px monospace';ctx.fillText('GLOBAL MODEL OUTPUT',bx+12,by+36);
+     ctx.restore();
+   }
+   ctx.fillStyle='rgba(182,223,211,.8)';ctx.font='10px monospace';ctx.fillText('ILLUSTRATION / EDUCATIONAL ANATOMY',Math.max(14,w*.055),h-56);
+ }
+ function updateImage(){if(image){image.style.transform=`translate(${state.panX}px,${state.panY}px) scale(${state.zoom})`;}}
+ function measure(){const box=canvas.getBoundingClientRect();w=Math.round(box.width);h=Math.round(box.height);if(w<1||h<1)return;const dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
+ function changeView(view){if(!['cortex','memory','outputs'].includes(view))return;state.view=view;
+   document.querySelectorAll('[data-view]').forEach(b=>{const on=b.dataset.view===view;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});draw();}
+ function setLayer(layer){state.layer=layer;document.querySelectorAll('[data-layer]').forEach(b=>{const on=b.dataset.layer===layer;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});draw();}
+ function setRegion(id){if(!REGIONS[id])return;state.region=id;state.layer='structure';setLayer('structure');
+   if(REGIONS[id].deep)changeView('memory');else changeView('cortex');
+   const info=REGIONS[id],d=pick('region-description');d.replaceChildren();const title=document.createElement('strong');title.textContent=info.name;const desc=document.createElement('p');desc.textContent=info.detail;const note=document.createElement('small');note.textContent=info.note;d.append(title,desc,note);
+   document.querySelectorAll('[data-region]').forEach(b=>{const on=b.dataset.region===id;b.classList.toggle('chosen',on);b.setAttribute('aria-pressed',String(on));});draw();}
+ function setFeature(feature){state.feature=feature;const info=ATLAS_FEATURES[feature];if(!info)return;const d=pick('feature-description');d.replaceChildren();const title=document.createElement('strong');title.textContent=info.name;const desc=document.createElement('p');desc.textContent=info.copy;const kind=document.createElement('span');kind.textContent=info.kind;d.append(title,desc,kind);document.querySelectorAll('[data-feature]').forEach(b=>{const on=b.dataset.feature===feature;b.classList.toggle('chosen',on);b.setAttribute('aria-pressed',String(on));});draw();}
+ function zoom(f){state.zoom=Math.max(.75,Math.min(1.8,state.zoom*f));pick('zoom-label').textContent=`${Math.round(state.zoom*100)}%`;updateImage();draw();}
  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>changeView(b.dataset.view)));
  document.querySelectorAll('[data-layer]').forEach(b=>b.addEventListener('click',()=>setLayer(b.dataset.layer)));
- document.querySelectorAll('[data-feature]').forEach(b=>b.addEventListener('click',()=>{setFeature(b.dataset.feature);if(state.layer!=='features')setLayer('features');}));
- const zoom=(factor)=>{state.zoom=Math.min(1.55,Math.max(.65,state.zoom*factor));pick('zoom-label').textContent=Math.round(state.zoom*100)+'%';draw();};
+ document.querySelectorAll('[data-region]').forEach(b=>b.addEventListener('click',()=>setRegion(b.dataset.region)));
+ document.querySelectorAll('[data-feature]').forEach(b=>b.addEventListener('click',()=>{setFeature(b.dataset.feature);changeView('cortex');setLayer('features');}));
  pick('zoom-in').addEventListener('click',()=>zoom(1.14));pick('zoom-out').addEventListener('click',()=>zoom(1/1.14));
- pick('reset-view').addEventListener('click',()=>{state.zoom=1;pick('zoom-label').textContent='100%';changeView('lateral');setLayer('structure');setFeature('eTIV');});
- canvas.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.07:1/1.07);},{passive:false});
- canvas.addEventListener('pointerdown',e=>{state.drag=true;state.lastX=e.clientX;state.lastY=e.clientY;canvas.setPointerCapture?.(e.pointerId);});
- canvas.addEventListener('pointermove',e=>{if(!state.drag)return;state.targetYaw+=(e.clientX-state.lastX)*.008;state.targetPitch=Math.min(1.4,Math.max(-1.4,state.targetPitch+(e.clientY-state.lastY)*.006));state.lastX=e.clientX;state.lastY=e.clientY;draw();});
- const release=()=>state.drag=false;canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',release);
- window.addEventListener('resize',measure,{passive:true});measure();if(typeof requestAnimationFrame==='function')animate();
+ pick('reset-view').addEventListener('click',()=>{state.panX=0;state.panY=0;state.zoom=1;pick('zoom-label').textContent='100%';updateImage();setRegion('frontal');setFeature('eTIV');});
+ canvas.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.08:1/1.08);},{passive:false});
+ canvas.addEventListener('pointerdown',e=>{state.drag=true;state.lastX=e.clientX;state.lastY=e.clientY;state.downX=e.clientX;state.downY=e.clientY;canvas.setPointerCapture?.(e.pointerId);});
+ canvas.addEventListener('pointermove',e=>{if(!state.drag)return;state.panX+=(e.clientX-state.lastX);state.panY+=(e.clientY-state.lastY);state.lastX=e.clientX;state.lastY=e.clientY;updateImage();draw();});
+ canvas.addEventListener('pointerup',e=>{state.drag=false;if(Math.hypot(e.clientX-state.downX,e.clientY-state.downY)<8){const rect=canvas.getBoundingClientRect();const nearby=Object.entries(REGIONS).map(([id,r])=>({id,p:xy(r)})).filter(({id})=>REGIONS[id].deep===(state.view==='memory')).map(v=>({id:v.id,d:Math.hypot(v.p.x-(e.clientX-rect.left),v.p.y-(e.clientY-rect.top))})).sort((a,b)=>a.d-b.d)[0];if(nearby&&nearby.d<25)setRegion(nearby.id);}});
+ canvas.addEventListener('pointercancel',()=>{state.drag=false;});
+ window.addEventListener('resize',measure,{passive:true});measure();
+ const setOutcome=(key)=>{if(!outcomes[key])return;state.outcome=key;changeView('outputs');setLayer('network');};
+ return {setOutcome,changeView,setLayer,setRegion};
+}
+function outcomeInit(atlas){
+ const hold=data.experiments.session_holdout.find(r=>r.model==='ELM');if(!hold)return;
+ for(const key of ['tp','tn','fp','fn'])pick('outcome-count-'+key).textContent=String(hold[key]);
+ pick('outcome-total').textContent=`${hold.tp+hold.tn} / ${hold.n}`;
+ const info={
+ tp:{name:'Correctly predicted demented',actual:'demented',pred:'demented'},
+ tn:{name:'Correctly predicted nondemented',actual:'nondemented',pred:'nondemented'},
+ fp:{name:'Incorrectly predicted demented',actual:'nondemented',pred:'demented'},
+ fn:{name:'Incorrectly predicted nondemented',actual:'demented',pred:'nondemented'}
+ };
+ let current='tp';
+ const choose=(key)=>{if(!info[key])return;current=key;const v=info[key];
+   pick('outcome-headline').textContent=`${hold[key]} · ${v.name.toLowerCase()} session${hold[key]===1?'':'s'}`;
+   pick('outcome-copy').textContent=`Actual group: ${v.actual}. ELM predicted: ${v.pred}. This is an aggregate count from the saved holdout confusion matrix, not a participant-specific prediction, probability or brain-region score.`;
+   document.querySelectorAll('[data-outcome]').forEach(b=>{const on=b.dataset.outcome===key;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});
+ };
+ document.querySelectorAll('[data-outcome]').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.outcome)));
+ pick('show-outcome-on-brain').addEventListener('click',()=>{atlas?.setOutcome(current);pick('atlas').scrollIntoView?.({behavior:'smooth',block:'start'});});
+ choose('tp');
 }
 
-function init(){cohort();chart();activate();atlasInit();
+function init(){cohort();chart();activate();atlasController=atlasInit();outcomeInit(atlasController);
  document.querySelectorAll('[data-protocol]').forEach(b=>b.addEventListener('click',()=>{protocol=b.dataset.protocol;selected='ELM';document.querySelectorAll('[data-protocol]').forEach(el=>{el.classList.toggle('selected',el.dataset.protocol===protocol);el.setAttribute('aria-pressed',String(el.dataset.protocol===protocol));});chart();}));
  pick('metric-select').addEventListener('change',e=>{metric=e.target.value;chart();});pick('activation-select').addEventListener('change',activate);
  pick('download-metrics').addEventListener('click',()=>{const cols=['model','n','accuracy','sensitivity','specificity','f1','auc','tn','fp','fn','tp'];const lines=[cols.join(','),...rows().map(r=>cols.map(k=>r[k]).join(','))];const url=URL.createObjectURL(new Blob([lines.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=`oasis_elm_${protocol}.csv`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);});

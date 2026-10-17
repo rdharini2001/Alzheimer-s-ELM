@@ -48,7 +48,12 @@ class WebsiteTests(unittest.TestCase):
     def test_atlas_controls_and_data_scoping(self):
         import re
         self.assertIn('id="brain-canvas"', self.page)
-        for view in ('lateral', 'coronal', 'axial'):
+        self.assertIn('assets/brain-lateral.webp', self.page)
+        self.assertIn('data-outcome="tp"', self.page)
+        self.assertIn('data-outcome="fn"', self.page)
+        for region in ('frontal','parietal','temporal','occipital','cerebellum','hippocampus','amygdala','ventricles'):
+            self.assertIn(f'data-region="{region}"', self.page)
+        for view in ('cortex', 'memory', 'outputs'):
             self.assertIn(f'data-view="{view}"', self.page)
         for layer in ('structure', 'features', 'network'):
             self.assertIn(f'data-layer="{layer}"', self.page)
@@ -58,6 +63,15 @@ class WebsiteTests(unittest.TestCase):
         self.assertIn('assets/site.css', self.page)
         self.assertNotIn('__PROJECT_DATA__', self.page)
         self.assertNotRegex(self.page, r'OAS2_\d{4}')
+
+    def test_brain_image_available_and_outcome_counts_in_source(self):
+        image=ROOT/'docs/assets/brain-lateral.webp'
+        self.assertTrue(image.is_file() and image.stat().st_size>100_000)
+        hold=self.content['experiments']['session_holdout'][0]
+        self.assertEqual(hold['tp']+hold['tn']+hold['fp']+hold['fn'],60)
+        script=(ROOT/'docs/assets/site.js').read_text()
+        self.assertIn('hold[key]',script)
+        self.assertIn('REGIONS',script)
 
     def test_page_contains_published_article_link_and_no_personal_records(self):
         self.assertIn('https://doi.org/10.1615/JMachLearnModelComput.2023048413',self.page)
