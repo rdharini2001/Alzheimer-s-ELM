@@ -13,7 +13,7 @@ Dharini Raghavan · K. V. Suma · Puneeth N. Ganesh
 [![Tests](https://img.shields.io/badge/Tests-GitHub%20Actions-21586C?style=flat-square)](.github/workflows/repro.yml)
 [![Paper](https://img.shields.io/badge/Published-Paper-508F79?style=flat-square)](https://doi.org/10.1615/JMachLearnModelComput.2023048413)
 
-**[Open the NeuroScope interactive brain explorer](docs/index.html)** &nbsp; · &nbsp; **[Read the paper](https://doi.org/10.1615/JMachLearnModelComput.2023048413)** &nbsp; · &nbsp; [Methods](docs/METHODS.md) &nbsp; · &nbsp; [Results](docs/RESULTS.md)
+**[Open the NeuroScope interactive brain explorer](https://rdharini2001.github.io/Alzheimer-s-ELM/)** &nbsp; · &nbsp; **[Read the paper](https://doi.org/10.1615/JMachLearnModelComput.2023048413)** &nbsp; · &nbsp; [Methods](docs/METHODS.md) &nbsp; · &nbsp; [Results](docs/RESULTS.md)
 
 </div>
 
