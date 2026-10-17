@@ -1,19 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-label="The Longitudinal Brain, OASIS-2 and Extreme Learning Machines">
- <defs><linearGradient id="ground" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f3ed"/><stop offset="1" stop-color="#e7dbec"/></linearGradient><linearGradient id="disc" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#715da5"/><stop offset="1" stop-color="#392b60"/></linearGradient></defs>
- <rect width="1200" height="340" rx="11" fill="url(#ground)"/>
- <path d="M0 296Q350 202 610 295T1200 235" fill="none" stroke="#92649b" stroke-opacity=".1" stroke-width="65"/>
- <text x="54" y="53" fill="#a46b85" font-family="monospace" font-size="13" letter-spacing="3">NEUROIMAGING     /     LONGITUDINAL STUDY     /     2023</text>
- <text x="54" y="131" font-family="Georgia,serif" font-size="61" fill="#261d42">The Longitudinal</text>
- <text x="54" y="201" font-family="Georgia,serif" font-size="72" font-style="italic" fill="#725b9f">Brain.</text>
- <text x="57" y="247" font-family="Arial,sans-serif" font-size="17" fill="#6c5d73">Extreme learning machines for dementia classification in OASIS-2</text>
- <rect x="52" y="281" width="305" height="30" rx="15" fill="#261d42"/><text x="69" y="302" fill="white" font-family="monospace" font-size="13">150 PEOPLE  ·  373 MRI SESSIONS</text>
- <g transform="translate(910 172)">
- <circle r="145" fill="url(#disc)"/><ellipse rx="164" ry="118" fill="none" stroke="#ceaccf" stroke-opacity=".35"/><ellipse rx="174" ry="126" fill="none" stroke="#ceaccf" stroke-opacity=".18" transform="rotate(-22)"/>
- <path d="M3 -116 C-33 -128 -61 -107 -69 -91 C-101 -91 -111 -62 -111 -41 C-133 -16 -127 19 -108 35 C-115 73 -81 97 -52 95 C-37 121 -7 120 14 105 C39 126 77 106 84 85 C117 78 130 41 116 18 C130 -10 109 -43 91 -56 C88 -95 46 -120 3 -116Z" fill="#bea5d8" fill-opacity=".13" stroke="#dabbe9" stroke-width="2"/>
- <g fill="none" stroke="#d9b4d5" stroke-width="2" stroke-linecap="round" opacity=".76"><path d="M-17 -103C-36 -79 -29 -58 -7 -54 C18 -48 9 -22 -8 -5 C-23 15 -1 44 16 44"/><path d="M40 -100C28 -76 55 -63 60 -49 C68 -26 45 -9 57 8 C75 28 56 49 70 64"/><path d="M-95 -55C-67 -40 -72 -17 -82 2 C-103 26 -82 60 -59 63"/><path d="M-43 -28C-11 -6 -41 18 -49 33 C-64 59 -32 84 -18 87"/><path d="M22 101C38 79 20 62 4 58 C-17 50 -14 29 -2 10"/><path d="M97 -8 C75 6 91 28 103 31 C115 46 88 65 80 73"/></g>
- <g fill="#f3b7aa"><circle cx="-43" cy="-60" r="6"/><circle cx="40" cy="-22" r="6"/><circle cx="-76" cy="24" r="5"/><circle cx="26" cy="71" r="6"/><circle cx="80" cy="54" r="5"/></g>
- </g>
- <g stroke="#aa84b1" stroke-opacity=".6" fill="none"><path d="M618 83L782 133"/><path d="M643 158L764 167"/><path d="M620 232L773 213"/></g>
- <g fill="#c66c70"><circle cx="617" cy="83" r="6"/><circle cx="643" cy="158" r="6"/><circle cx="620" cy="232" r="6"/></g>
- <text x="1142" y="311" fill="#7d698c" text-anchor="end" font-family="monospace" font-size="12" letter-spacing="1.2">OASIS-2 / ELM</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="400" viewBox="0 0 1320 400" role="img" aria-labelledby="title desc">
+<title id="title">NeuroScope — Alzheimer's Disease and Extreme Learning Machines</title><desc id="desc">An abstract research atlas cover with a teal three-dimensional brain form and a graphical feature network.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#091e2d"/><stop offset="1" stop-color="#19465a"/></linearGradient>
+ <linearGradient id="brain" x1=".1" y1=".1" x2=".9" y2="1"><stop stop-color="#c5f5dc"/><stop offset=".54" stop-color="#3f9c97"/><stop offset="1" stop-color="#16435b"/></linearGradient>
+ <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="#a0e7db" stroke-opacity=".10" stroke-width="1"/></pattern>
+ <radialGradient id="glow"><stop stop-color="#79c8c0" stop-opacity=".28"/><stop offset="1" stop-color="#79c8c0" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1320" height="400" fill="url(#bg)"/><rect width="1320" height="400" fill="url(#grid)"/><circle cx="987" cy="198" r="255" fill="url(#glow)"/>
+<g font-family="Arial,sans-serif"><text x="58" y="68" font-size="25" font-weight="800" fill="#e7ffaf" letter-spacing="2">N° <tspan fill="#ffffff">NEURO</tspan><tspan fill="#96caca" font-weight="400">SCOPE</tspan></text><text x="60" y="115" fill="#8ab1bd" font-family="monospace" font-size="13" letter-spacing="4">OASIS-2  /  INTERACTIVE RESEARCH ATLAS</text><text x="54" y="224" font-size="69" font-weight="700" fill="#f9fffa" letter-spacing="-4">Decoding the</text><text x="55" y="307" font-family="Georgia,serif" font-size="86" font-style="italic" fill="#e2f99d">changing brain.</text><text x="60" y="360" font-family="monospace" font-size="12" fill="#acd0cf" letter-spacing="2">NEUROIMAGING  ×  EXTREME LEARNING MACHINES</text></g>
+<g transform="translate(760 31)"><ellipse cx="265" cy="182" rx="236" ry="159" fill="none" stroke="#d1f5e4" stroke-opacity=".20"/><ellipse cx="265" cy="182" rx="196" ry="188" fill="none" stroke="#d1f5e4" stroke-opacity=".13" transform="rotate(-26 265 182)"/>
+<path d="M258 35C205 29 172 61 151 84C115 72 91 113 95 144C72 164 70 199 91 222C82 258 105 295 140 304C150 331 194 348 224 333C254 361 299 357 318 333C366 334 386 304 386 271C419 245 428 205 405 174C417 145 393 105 368 102C345 61 302 34 258 35Z" fill="url(#brain)" stroke="#c4ffdc" stroke-width="2.5"/>
+<g fill="none" stroke-linecap="round" stroke-width="2.5" stroke="#e5ffcf" opacity=".55"><path d="M194 65c-26 40 26 53 13 83s-67 31-63 67s42 40 38 70"/><path d="M265 54c25 28-29 39-21 70s57 27 47 66s-71 39-61 85"/><path d="M341 80c-48 22-32 48-3 57s31 47 12 64s-16 43 10 56"/><path d="M103 157c36 10 32 44 18 63s5 44 35 49"/><path d="M391 180c-35 14-11 39-27 55s-45 12-45 48"/><path d="M207 331c-19-24 9-36 20-52s-2-32-13-40"/><path d="M290 314c-26-28 21-41 11-74s-40-20-33-50"/><path d="M164 116c25 21 50 4 55-15"/><path d="M298 96c-5 23 28 25 35 40"/><path d="M179 205c11-23 43-26 51-14"/><path d="M352 298c-24-22-54-9-55 12"/></g>
+<g fill="#e9ffb0"><circle cx="149" cy="142" r="6"/><circle cx="297" cy="122" r="5"/><circle cx="382" cy="232" r="6"/><circle cx="219" cy="283" r="5"/></g>
+<g fill="none" stroke="#dbf6a4" stroke-opacity=".55"><path d="M149 142L55 86H-20"/><path d="M297 122l155-62h42"/><path d="M382 232l55 45h58"/><path d="M219 283l-91 67H41"/></g>
+<g font-family="monospace" font-size="12" fill="#e6ffb0"><text x="-11" y="80">CDR</text><text x="460" y="54">eTIV</text><text x="456" y="271">nWBV</text><text x="50" y="345">MMSE</text></g></g>
+<g stroke="#b4e6c8" stroke-width="1" opacity=".5"><path d="M22 22H62M22 22V62M1298 22H1258M1298 22V62M22 378H62M22 378V338M1298 378H1258M1298 378V338"/></g>
 </svg>

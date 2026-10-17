@@ -45,6 +45,20 @@ class WebsiteTests(unittest.TestCase):
                 total+=1
         self.assertEqual(total,27)
 
+    def test_atlas_controls_and_data_scoping(self):
+        import re
+        self.assertIn('id="brain-canvas"', self.page)
+        for view in ('lateral', 'coronal', 'axial'):
+            self.assertIn(f'data-view="{view}"', self.page)
+        for layer in ('structure', 'features', 'network'):
+            self.assertIn(f'data-layer="{layer}"', self.page)
+        for feature in ('CDR', 'eTIV', 'EDUC', 'MMSE', 'nWBV'):
+            self.assertIn(f'data-feature="{feature}"', self.page)
+        self.assertIn('not a patient MRI', self.page)
+        self.assertIn('assets/site.css', self.page)
+        self.assertNotIn('__PROJECT_DATA__', self.page)
+        self.assertNotRegex(self.page, r'OAS2_\d{4}')
+
     def test_page_contains_published_article_link_and_no_personal_records(self):
         self.assertIn('https://doi.org/10.1615/JMachLearnModelComput.2023048413',self.page)
         self.assertNotIn('OAS2_0001',self.page)

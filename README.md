@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/overview.svg" alt="The Longitudinal Brain — OASIS-2 and Extreme Learning Machines" width="100%" />
+<img src="docs/assets/overview.svg" alt="NeuroScope — OASIS-2 and Extreme Learning Machines" width="100%" />
 
 # Assessment of Neuroimaging Data and Identification of Alzheimer's Disease Using Extreme Learning Machines
 
@@ -8,12 +8,12 @@
 
 Dharini Raghavan · K. V. Suma · Puneeth N. Ganesh
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-6E58AC?style=flat-square&logo=python&logoColor=white)](#get-started)
-[![OASIS](https://img.shields.io/badge/OASIS--2-150%20participants-C56D69?style=flat-square)](data/README.md)
-[![Tests](https://img.shields.io/badge/Tests-GitHub%20Actions-6E58AC?style=flat-square)](.github/workflows/repro.yml)
-[![Paper](https://img.shields.io/badge/Published-Paper-C56D69?style=flat-square)](https://doi.org/10.1615/JMachLearnModelComput.2023048413)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-21586C?style=flat-square&logo=python&logoColor=white)](#get-started)
+[![OASIS](https://img.shields.io/badge/OASIS--2-150%20participants-508F79?style=flat-square)](data/README.md)
+[![Tests](https://img.shields.io/badge/Tests-GitHub%20Actions-21586C?style=flat-square)](.github/workflows/repro.yml)
+[![Paper](https://img.shields.io/badge/Published-Paper-508F79?style=flat-square)](https://doi.org/10.1615/JMachLearnModelComput.2023048413)
 
-**[Explore the interactive research atlas](docs/index.html)** &nbsp; · &nbsp; **[Read the paper](https://doi.org/10.1615/JMachLearnModelComput.2023048413)** &nbsp; · &nbsp; [Methods](docs/METHODS.md) &nbsp; · &nbsp; [Results](docs/RESULTS.md)
+**[Open the NeuroScope interactive brain explorer](docs/index.html)** &nbsp; · &nbsp; **[Read the paper](https://doi.org/10.1615/JMachLearnModelComput.2023048413)** &nbsp; · &nbsp; [Methods](docs/METHODS.md) &nbsp; · &nbsp; [Results](docs/RESULTS.md)
 
 </div>
 
@@ -25,10 +25,10 @@ The dataset contains **150 participants** observed over **373 MRI sessions**. At
 
 ## Explore the results
 
-The accompanying project page has a different visual identity from our other research repositories. Designed as a compact neuroimaging atlas, it includes a longitudinal cohort view, age distribution, interactive classifier leaderboard, confusion matrices, ROC curves, and an ELM activation explorer. Charts are generated from saved experimental outputs.
+The accompanying **NeuroScope** project page is an interactive workspace for the OASIS-2 study. Its brain-inspired viewer offers rotatable orientations, zoom controls, study-variable selection, and a schematic view of ELM connectivity. The research sections include the longitudinal cohort, age distribution, classifier comparisons, confusion matrices, ROC curves, and an activation-function explorer. The brain illustration is conceptual, not an MRI reconstruction or a map of anatomical disease involvement; numerical charts are generated from the saved experiment outputs.
 
 <div align="center">
-<a href="docs/index.html"><img src="docs/assets/site-preview.webp" alt="Preview of the interactive neuro-atlas project page" width="84%" /></a>
+<a href="docs/index.html"><img src="docs/assets/site-preview.webp" alt="NeuroScope, the interactive brain explorer and research atlas" width="84%" /></a>
 </div>
 
 ### ELM experiments
