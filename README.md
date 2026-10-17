@@ -27,10 +27,6 @@ The dataset contains **150 participants** observed over **373 MRI sessions**. At
 
 The accompanying **NeuroScope** project page is an interactive workspace for the OASIS-2 study. Its brain-inspired viewer offers rotatable orientations, zoom controls, study-variable selection, and a schematic view of ELM connectivity. The research sections include the longitudinal cohort, age distribution, classifier comparisons, confusion matrices, ROC curves, and an activation-function explorer. The brain illustration is conceptual, not an MRI reconstruction or a map of anatomical disease involvement; numerical charts are generated from the saved experiment outputs.
 
-<div align="center">
-<a href="docs/index.html"><img src="docs/assets/site-preview.webp" alt="NeuroScope, the interactive brain explorer and research atlas" width="84%" /></a>
-</div>
-
 ### ELM experiments
 
 | Evaluation setting | Accuracy | Sensitivity | Specificity | F1 | ROC AUC |
