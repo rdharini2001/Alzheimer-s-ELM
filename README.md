@@ -29,10 +29,6 @@ The accompanying **NeuroScope** website combines an annotated lateral-view brain
 
 The **ELM outcome lens** displays true-positive, true-negative, false-positive and false-negative counts computed directly from the saved session-holdout results. Choosing an outcome adds a whole-brain indicator in the anatomy viewer. This indicator communicates a *global classification*, not the model's attention to an anatomical region or an individual participant's MRI. Cohort plots, model comparisons, ROC curves, confusion matrices and the activation-function explorer remain available.
 
-<div align="center">
-<a href="docs/index.html"><img src="docs/assets/site-preview.webp" alt="NeuroScope: labeled brain anatomy and aggregate ELM outcome exploration" width="84%" /></a>
-</div>
-
 ### ELM experiments
 
 | Evaluation setting | Accuracy | Sensitivity | Specificity | F1 | ROC AUC |
