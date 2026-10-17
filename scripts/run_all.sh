@@ -14,5 +14,6 @@ python -m oasis_repro.sensitivity
 python -m oasis_repro.session_holdout --root .
 python -m oasis_repro.figures --root .
 python -m oasis_repro.report
+python scripts/build_site.py
 python -m unittest discover -s tests -v
 python scripts/verify_results.py

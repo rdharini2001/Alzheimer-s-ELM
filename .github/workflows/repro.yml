@@ -1,4 +1,4 @@
-name: Reproducibility checks
+name: Software tests
 on:
   push:
   pull_request:
@@ -15,6 +15,12 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Run automated tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Build public results page
+        run: python scripts/build_site.py
+      - name: Check interactive website
+        run: |
+          node --check docs/assets/site.js
+          node tests/site_interactions.cjs
       - name: Verify output regenerates if data is provided
         run: |
           if [ -s data/processed/oasis_longitudinal.csv ]; then

@@ -1,0 +1,43 @@
+{
+  "sessions": 373,
+  "subjects": 150,
+  "groups": {
+    "Converted": 14,
+    "Demented": 64,
+    "Nondemented": 72
+  },
+  "ages": [
+    {
+      "age": "60\u201364",
+      "count": 9
+    },
+    {
+      "age": "65\u201369",
+      "count": 25
+    },
+    {
+      "age": "70\u201374",
+      "count": 36
+    },
+    {
+      "age": "75\u201379",
+      "count": 35
+    },
+    {
+      "age": "80\u201384",
+      "count": 26
+    },
+    {
+      "age": "85\u201389",
+      "count": 15
+    },
+    {
+      "age": "90\u201394",
+      "count": 3
+    },
+    {
+      "age": "95\u201399",
+      "count": 1
+    }
+  ]
+}

@@ -12,4 +12,4 @@
 
 **Limitations.** Small cohort, incomplete variables, correlated longitudinal sessions, diagnostic grouping labels, and no independent external dataset. The provided table contains derived imaging measures rather than MRI scans.
 
-**Intended use.** Research, method comparison, education, and reproducibility assessment only. Not suitable for clinical diagnostic, prognostic, or treatment decisions.
+**Intended use.** Research, method comparison, education, and method evaluation only. Not suitable for clinical diagnostic, prognostic, or treatment decisions.

@@ -42,6 +42,6 @@ The nested feature-selection experiment has five outer folds and three inner fol
 
 Accuracy, sensitivity, specificity, precision, F1, AUC, Brier score and confusion matrix entries are calculated on explicit predictions. Five-fold CV point estimates are computed from pooled out-of-fold predictions. Fixed-prediction participant-cluster bootstrap intervals are used for the ELM.
 
-## Computational reproducibility
+## Software and evaluation
 
-Run `bash scripts/run_all.sh` and `python scripts/verify_results.py`. Fixed seeds and recorded split manifests allow output verification. CDR-inclusive models should be interpreted as incorporating an existing clinical dementia rating rather than as MRI-only diagnostic models. The tabular dataset contains derived volumetric features, not the original scan images.
+The complete experiment suite runs with `bash scripts/run_all.sh`. Fixed seeds and recorded split manifests make it possible to check the predictions with `python scripts/verify_results.py`. CDR-inclusive models should be interpreted as incorporating an existing clinical dementia rating rather than as MRI-only diagnostic models. The tabular dataset contains derived volumetric features, not the original scan images.

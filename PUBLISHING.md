@@ -1,13 +1,7 @@
-# Publish on GitHub
+# Publishing the project
 
-Extract the **public-release ZIP** (not the complete private research ZIP). The public bundle contains code, documentation, tests, and aggregate figures/tables. OASIS subject records and journal content are excluded.
+GitHub Pages serves `docs/index.html` directly. Open **Settings → Pages**, select **Deploy from a branch**, then choose `main` and `/docs`. The resulting page is available at `https://<account>.github.io/<repository>/`.
 
-```bash
-git init -b main
-git add .
-git commit -m "Release OASIS-2 ELM companion code"
-git remote add origin https://github.com/YOUR_USERNAME/oasis-elm-companion-code.git
-git push -u origin main
-```
+Source data are not included in the public GitHub archive. Researchers can obtain the spreadsheet from the OASIS project and run `python scripts/ingest_xlsx.py data/raw/oasis_longitudinal_demographics.xlsx` before `bash scripts/run_all.sh`.
 
-Create `oasis-elm-companion-code` as an empty GitHub repository under your account first, or use `gh repo create oasis-elm-companion-code --public --source=. --remote=origin --push` after committing. All dataset access instructions appear in `data/README.md`.
+After updating results, run `python scripts/build_site.py` to refresh the website. Do not commit the original data, session-level predictions, train/test manifests, or publisher PDF to a public repository unless the respective terms explicitly permit redistribution.

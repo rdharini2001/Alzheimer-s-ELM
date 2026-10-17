@@ -50,7 +50,7 @@ OASIS-2 cohort: **150 participants** and **373 MRI sessions**. Participant diagn
 | `baseline_ever` | 150 | 70.67% | 0.6282 | 0.7917 | 0.6901 | 0.7863 |
 | `group_subject_no_cdr` | 336 | 81.55% | 0.6986 | 0.9053 | 0.7669 | 0.8781 |
 
-## Interpretation
+## Reading the evaluations
 
 The session-level holdout and participant-disjoint cross-validation answer different prediction questions. Sessions from the same person occur in both partitions in the session holdout. CDR is a recorded clinical dementia rating strongly related to the diagnostic outcome. Therefore the high CDR-inclusive scores are not equivalent to MRI-derived-feature-only prediction on unseen people.
 

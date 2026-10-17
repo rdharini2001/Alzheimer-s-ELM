@@ -1,13 +1,13 @@
 cff-version: 1.2.0
-message: "Please cite the study and OASIS-2 along with this companion software."
-title: "OASIS-2: ELM Alzheimer's Disease Companion Code"
+message: "Please cite the accompanying paper and the OASIS-2 dataset."
+title: "Extreme Learning Machines for Alzheimer's Disease: Research Code"
 type: software
-version: "1.1.0"
+version: "1.2.0"
 authors:
-  - name: "OASIS-ELM companion software contributors"
+  - name: "OASIS ELM research code contributors"
 abstract: >
-  Open, independently implemented companion code for extreme learning
-  machines and comparator classifiers using the OASIS-2 longitudinal cohort.
+  Implementation of extreme learning machines and conventional classifiers for
+  longitudinal OASIS-2 clinical and MRI-derived data.
 references:
   - type: article
     title: "Assessment of Neuroimaging Data and Identification of Alzheimer's Disease Using Extreme Learning Machines"
@@ -24,3 +24,4 @@ references:
     year: 2023
     start: 77
     end: 93
+    doi: 10.1615/JMachLearnModelComput.2023048413
