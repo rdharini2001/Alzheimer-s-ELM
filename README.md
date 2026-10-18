@@ -2,11 +2,11 @@
 
 # Assessment of Neuroimaging Data and Identification of Alzheimer's Disease Using Extreme Learning Machines
 
+<img src="docs/assets/site-preview.webp" alt="NeuroScope — explore brain anatomy and OASIS-2 ELM model outcomes" width="100%" />
+
 **Research code for the OASIS-2 longitudinal MRI study**
 
 Dharini Raghavan · K. V. Suma · Puneeth N. Ganesh
-
-<img src="docs/assets/site-preview.webp" alt="NeuroScope — explore brain anatomy and OASIS-2 ELM model outcomes" width="100%" />
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-21586C?style=flat-square&logo=python&logoColor=white)](#get-started)
 [![OASIS](https://img.shields.io/badge/OASIS--2-150%20participants-508F79?style=flat-square)](data/README.md)
